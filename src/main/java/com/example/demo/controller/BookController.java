@@ -29,4 +29,20 @@ public class BookController {
         List<Book> books = bookService.findAllBooks();
         return Result.success(books);
     }
+
+    // 技能：接收删除请求
+// @DeleteMapping 表示这个接口专门处理“删除”动作
+// {id} 是个占位符，客人传什么，我们就接什么
+    @DeleteMapping("/{id}")
+    public Result<String> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return Result.success("ID 为 " + id + " 的书已成功撤除！");
+    }
+
+    // 接收修改请求
+    @PutMapping("/{id}")
+    public Result<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+        Book updatedBook = bookService.updateBook(id, book);
+        return Result.success(updatedBook);
+    }
 }
