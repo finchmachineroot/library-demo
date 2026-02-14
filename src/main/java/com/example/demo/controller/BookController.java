@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.common.Result;
 import com.example.demo.model.Book;
 import com.example.demo.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class BookController {
 
     // 技能：接下客人的存书订单
     @PostMapping
-    public Result<Book> addBook(@RequestBody Book book) {
+    public Result<Book> addBook(@Valid @RequestBody Book book) {
         // 让主厨去处理，然后把结果装进 Result 信封
         Book savedBook = bookService.saveBook(book);
         return Result.success(savedBook);
