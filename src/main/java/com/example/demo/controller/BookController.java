@@ -46,4 +46,11 @@ public class BookController {
         Book updatedBook = bookService.updateBook(id, book);
         return Result.success(updatedBook);
     }
+
+    // 搜索接口：http://localhost:8080/books/search?keyword=Java
+    @GetMapping("/search")
+    public Result<List<Book>> searchBooks(@RequestParam String keyword) {
+        List<Book> results = bookService.searchBooks(keyword);
+        return Result.success(results);
+    }
 }

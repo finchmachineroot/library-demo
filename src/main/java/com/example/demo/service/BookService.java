@@ -46,4 +46,9 @@ public class BookService {
                 })
                 .orElseThrow(() -> new RuntimeException("修改失败：没找到 ID 为 " + id + " 的书！"));
     }
+
+    public List<Book> searchBooks(String keyword) {
+        // 这里的两个参数都传入 keyword，表示只要书名“或”作者里包含这个词，就搜出来
+        return bookRepository.findByTitleContainingOrAuthorContaining(keyword, keyword);
+    }
 }
