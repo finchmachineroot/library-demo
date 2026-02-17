@@ -53,4 +53,11 @@ public class BookController {
         List<Book> results = bookService.searchBooks(keyword);
         return Result.success(results);
     }
+
+    @GetMapping("/{id}")
+    public Result<Book> findBookById(@PathVariable Long id) {
+        Book idBook = bookService.findBookById(id);
+        return Result.success(idBook);
+    }
+
 }

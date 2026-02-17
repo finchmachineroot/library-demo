@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class BookService {
     }
 
     // 主厨的新技能：撤掉某本书
+    @CacheEvict(value = "books", key = "#id")
     public void deleteBook(Long id) {
         // 1. 先检查书是否存在（防止删了个寂寞）
         if (!bookRepository.existsById(id)) {
@@ -50,5 +53,12 @@ public class BookService {
     public List<Book> searchBooks(String keyword) {
         // 这里的两个参数都传入 keyword，表示只要书名“或”作者里包含这个词，就搜出来
         return bookRepository.findByTitleContainingOrAuthorContaining(keyword, keyword);
+    }
+
+    // @Cacheable 的意思：先去 Redis 查，有就直接给；没有再去数据库查，查完顺便存进 Redis
+    @Cacheable(value = "books", key = "#id")
+    public Book findBookById(Long id) {
+        System.out.println("--- 走数据库了！ID 是：" + id + " ---");
+        return bookRepository.findById(id).orElse(null);
     }
 }
