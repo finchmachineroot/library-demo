@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.common.Result;
 import com.example.demo.model.Book;
 import com.example.demo.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController // 挂上“前台”的招牌，支持返回 JSON 数据
 @RequestMapping("/books") // 这家店的地址是 /books
+@Tag(name = "图书管理模块", description = "提供图书的增删改查及搜索功能")
 public class BookController {
 
     @Autowired // 呼叫主厨
@@ -49,12 +52,14 @@ public class BookController {
 
     // 搜索接口：http://localhost:8080/books/search?keyword=Java
     @GetMapping("/search")
+    @Operation(summary = "搜索图书", description = "根据关键词进行标题或作者的模糊查询")
     public Result<List<Book>> searchBooks(@RequestParam String keyword) {
         List<Book> results = bookService.searchBooks(keyword);
         return Result.success(results);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "通过 ID 查询图书", description = "优先从 Redis 缓存获取，不存在则查询数据库")
     public Result<Book> findBookById(@PathVariable Long id) {
         Book idBook = bookService.findBookById(id);
         return Result.success(idBook);
