@@ -26,7 +26,7 @@ public class BookService {
     }
 
     // 主厨的新技能：撤掉某本书
-    @CacheEvict(value = "books", key = "#id")
+    @CacheEvict(value = "books", key = "#id",beforeInvocation = true)
     public void deleteBook(Long id) {
         // 1. 先检查书是否存在（防止删了个寂寞）
         if (!bookRepository.existsById(id)) {

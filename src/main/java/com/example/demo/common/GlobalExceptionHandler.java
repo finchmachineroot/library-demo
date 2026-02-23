@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handleValidationException(MethodArgumentNotValidException e) {
         // 抓取你在实体类 @NotBlank(message = "...") 里写的那个提示语
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        log.warn("参数校验失败: {}", message);
         return Result.error(message);
     }
 }
